@@ -72,11 +72,11 @@ class OperationsGatewayHTTPClient(HTTPClient):
         """
         return self.get("/api/v1/operations/operations-summary", params=QueryParams(**query))
 
-    def make_fee_operation_api(self, query: MakeOperationQueryDict) -> Response:
+    def make_fee_operation_api(self, request: MakeOperationQueryDict) -> Response:
         """
         Выполняет POST-запрос на создание операции комиссии
 
-        :param query: Словарь с параметрами запроса, например: {
+        :param request: Словарь с параметрами запроса, например: {
                                                                   "status": "FAILED",
                                                                   "amount": 0,
                                                                   "cardId": "string",
@@ -84,13 +84,13 @@ class OperationsGatewayHTTPClient(HTTPClient):
                                                                 }.
         :return: Объект httpx.Response с данными об операции.
         """
-        return self.post("/api/v1/operations/make-fee-operation", json=QueryParams(**query))
+        return self.post("/api/v1/operations/make-fee-operation", json=request)
 
-    def make_top_up_operation_api(self, query: MakeOperationQueryDict) -> Response:
+    def make_top_up_operation_api(self, request: MakeOperationQueryDict) -> Response:
         """
         Выполняет POST-запрос на создание операции пополнения
 
-        :param query: Словарь с параметрами запроса, например: {
+        :param request: Словарь с параметрами запроса, например: {
                                                                   "status": "FAILED",
                                                                   "amount": 0,
                                                                   "cardId": "string",
@@ -98,13 +98,13 @@ class OperationsGatewayHTTPClient(HTTPClient):
                                                                 }.
         :return: Объект httpx.Response с данными об операции.
         """
-        return self.post("/api/v1/operations/make-top-up-operation", json=QueryParams(**query))
+        return self.post("/api/v1/operations/make-top-up-operation", json=request)
 
-    def make_cashback_operation_api(self, query: MakeOperationQueryDict) -> Response:
+    def make_cashback_operation_api(self, request: MakeOperationQueryDict) -> Response:
         """
         Выполняет POST-запрос на создание операции кэшбэка
 
-        :param query: Словарь с параметрами запроса, например: {
+        :param request: Словарь с параметрами запроса, например: {
                                                                   "status": "FAILED",
                                                                   "amount": 0,
                                                                   "cardId": "string",
@@ -112,13 +112,13 @@ class OperationsGatewayHTTPClient(HTTPClient):
                                                                 }.
         :return: Объект httpx.Response с данными об операции.
         """
-        return self.post("/api/v1/operations/make-cashback-operation", json=QueryParams(**query))
+        return self.post("/api/v1/operations/make-cashback-operation", json=request)
 
-    def make_transfer_operation_api(self, query: MakeOperationQueryDict) -> Response:
+    def make_transfer_operation_api(self, request: MakeOperationQueryDict) -> Response:
         """
         Выполняет POST-запрос на создание операции перевода
 
-        :param query: Словарь с параметрами запроса, например: {
+        :param request: Словарь с параметрами запроса, например: {
                                                                   "status": "FAILED",
                                                                   "amount": 0,
                                                                   "cardId": "string",
@@ -126,13 +126,13 @@ class OperationsGatewayHTTPClient(HTTPClient):
                                                                 }.
         :return: Объект httpx.Response с данными об операции.
         """
-        return self.post("/api/v1/operations/make-transfer-operation", json=QueryParams(**query))
+        return self.post("/api/v1/operations/make-transfer-operation", json=request)
 
-    def make_purchase_operation_api(self, query: MakePurchaseOperationQueryDict) -> Response:
+    def make_purchase_operation_api(self, request: MakePurchaseOperationQueryDict) -> Response:
         """
         Выполняет POST-запрос на создание операции покупки
 
-        :param query: Словарь с параметрами запроса, например: {
+        :param request: Словарь с параметрами запроса, например: {
                                                                   "status": "FAILED",
                                                                   "amount": 0,
                                                                   "cardId": "string",
@@ -141,13 +141,13 @@ class OperationsGatewayHTTPClient(HTTPClient):
                                                                 }
         :return: Объект httpx.Response с данными об операции.
         """
-        return self.post("/api/v1/operations/make-purchase-operation", json=QueryParams(**query))
+        return self.post("/api/v1/operations/make-purchase-operation", json=request)
 
-    def make_bill_payment_operation_api(self, query: MakeOperationQueryDict) -> Response:
+    def make_bill_payment_operation_api(self, request: MakeOperationQueryDict) -> Response:
         """
         Выполняет POST-запрос на создание операции оплаты по счету
 
-        :param query: Словарь с параметрами запроса, например: {
+        :param request: Словарь с параметрами запроса, например: {
                                                                   "status": "FAILED",
                                                                   "amount": 0,
                                                                   "cardId": "string",
@@ -155,13 +155,13 @@ class OperationsGatewayHTTPClient(HTTPClient):
                                                                 }.
         :return: Объект httpx.Response с данными об операции.
         """
-        return self.post("/api/v1/operations/make-bill-payment-operation", json=QueryParams(**query))
+        return self.post("/api/v1/operations/make-bill-payment-operation", json=request)
 
-    def make_cash_withdrawal_operation_api(self, query: MakeOperationQueryDict) -> Response:
+    def make_cash_withdrawal_operation_api(self, request: MakeOperationQueryDict) -> Response:
         """
         Выполняет POST-запрос на создание операции снятия наличных денег
 
-        :param query: Словарь с параметрами запроса, например: {
+        :param request: Словарь с параметрами запроса, например: {
                                                                   "status": "FAILED",
                                                                   "amount": 0,
                                                                   "cardId": "string",
@@ -169,4 +169,4 @@ class OperationsGatewayHTTPClient(HTTPClient):
                                                                 }.
         :return: Объект httpx.Response с данными об операции.
         """
-        return self.post("/api/v1/operations/make-cash-withdrawal-operation", json=QueryParams(**query))
+        return self.post("/api/v1/operations/make-cash-withdrawal-operation", json=request)
