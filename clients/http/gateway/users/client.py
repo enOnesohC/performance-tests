@@ -1,54 +1,15 @@
 from httpx import Response
+
 from clients.http.client import HTTPClient
 from clients.http.gateway.client import build_gateway_http_client
-import time
+from clients.http.gateway.users.schema import (  # Добавили импорт моделей
+    GetUserResponseSchema,
+    CreateUserRequestSchema,
+    CreateUserResponseSchema
+)
 
 
-from pydantic import BaseModel, Field, EmailStr, ConfigDict
-
-
-# Добавили суффикс Schema вместо Dict
-class UserSchema(BaseModel):  # Наследуем от BaseModel вместо TypedDict
-    """
-    Описание структуры пользователя.
-    """
-    id: str
-    email: EmailStr
-    last_name: str = Field(alias="lastName")  # Использовали alise
-    first_name: str = Field(alias="firstName")  # Использовали alise
-    middle_name: str = Field(alias="middleName")  # Использовали alise
-    phone_number: str = Field(alias="phoneNumber")  # Использовали alise
-
-
-# Добавили суффикс Schema вместо Dict
-class GetUserResponseSchema(BaseModel):  # Наследуем от BaseModel вместо TypedDict
-    """
-    Описание структуры ответа получения пользователя.
-    """
-    user: UserSchema
-
-
-# Добавили суффикс Schema вместо Dict
-class CreateUserRequestSchema(BaseModel):  # Наследуем от BaseModel вместо TypedDict
-    """
-    Структура данных для создания нового пользователя.
-    """
-    model_config = ConfigDict(populate_by_name=True)
-
-    email: EmailStr
-    last_name: str = Field(alias="lastName")  # Использовали alise
-    first_name: str = Field(alias="firstName")  # Использовали alise
-    middle_name: str = Field(alias="middleName")  # Использовали alise
-    phone_number: str = Field(alias="phoneNumber")  # Использовали alise
-
-
-# Добавили суффикс Schema вместо Dict
-class CreateUserResponseSchema(BaseModel):  # Наследуем от BaseModel вместо TypedDict
-    """
-    Описание структуры ответа создания пользователя.
-    """
-    user: UserSchema
-
+# Старые модели с использованием TypedDict были удалены
 
 class UsersGatewayHTTPClient(HTTPClient):
     """
@@ -82,15 +43,8 @@ class UsersGatewayHTTPClient(HTTPClient):
 
     # Теперь используем pydantic-модель для аннотации
     def create_user(self) -> CreateUserResponseSchema:
-        request = CreateUserRequestSchema(  # Используем pydantic-модель для отправки запроса
-            email=f"user.{time.time()}@example.com",  # Передаем аргументы в формате snake_case вместо camelCase
-            last_name="string",  # Передаем аргументы в формате snake_case вместо camelCase
-            first_name="string",  # Передаем аргументы в формате snake_case вместо camelCase
-            middle_name="string",  # Передаем аргументы в формате snake_case вместо camelCase
-            phone_number="string"  # Передаем аргументы в формате snake_case вместо camelCase
-        )
+        request = CreateUserRequestSchema()
         response = self.create_user_api(request)
-        # Инициализируем модель через валидацию JSON строки
         return CreateUserResponseSchema.model_validate_json(response.text)
 
 

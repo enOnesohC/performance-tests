@@ -206,8 +206,6 @@ class OperationsGatewayHTTPClient(HTTPClient):
         :return: Ответ от сервера (объект JSON).
         """
         request = MakeOperationRequestSchema(
-            status='COMPLETED',
-            amount=1000,
             card_id=card_id,
             account_id=account_id
         )
@@ -223,8 +221,6 @@ class OperationsGatewayHTTPClient(HTTPClient):
         :return: Ответ от сервера (объект JSON).
         """
         request = MakeOperationRequestSchema(
-            status='COMPLETED',
-            amount=1000,
             card_id=card_id,
             account_id=account_id
         )
@@ -240,8 +236,6 @@ class OperationsGatewayHTTPClient(HTTPClient):
         :return: Ответ от сервера (объект JSON).
         """
         request = MakeOperationRequestSchema(
-            status='COMPLETED',
-            amount=1000,
             card_id=card_id,
             account_id=account_id
         )
@@ -257,29 +251,23 @@ class OperationsGatewayHTTPClient(HTTPClient):
         :return: Ответ от сервера (объект JSON).
         """
         request = MakeOperationRequestSchema(
-            status='COMPLETED',
-            amount=1000,
             card_id=card_id,
             account_id=account_id
         )
         response = self.make_transfer_operation_api(request)
         return MakeTransferResponseSchema.model_validate_json(response.text)
 
-    def make_purchase_operation(self, card_id: str, account_id: str, category: str) -> MakePurchaseResponseSchema:
+    def make_purchase_operation(self, card_id: str, account_id: str) -> MakePurchaseResponseSchema:
         """
         Вызов метода make_purchase_operation
 
         :param card_id: строка, идентификатор карты
         :param account_id: строка, идентификатор аккаунта
-        :param category: строка, категория
         :return: Ответ от сервера (объект JSON).
         """
         request = MakePurchaseOperationRequestSchema(
-            status='COMPLETED',
-            amount=1000,
             card_id=card_id,
-            account_id=account_id,
-            category=category
+            account_id=account_id
         )
         response = self.make_purchase_operation_api(request)
         return MakePurchaseResponseSchema.model_validate_json(response.text)
@@ -293,8 +281,6 @@ class OperationsGatewayHTTPClient(HTTPClient):
         :return: Ответ от сервера (объект JSON).
         """
         request = MakeOperationRequestSchema(
-            status='COMPLETED',
-            amount=1000,
             card_id=card_id,
             account_id=account_id
         )
@@ -310,8 +296,6 @@ class OperationsGatewayHTTPClient(HTTPClient):
         :return: Ответ от сервера (объект JSON).
         """
         request = MakeOperationRequestSchema(
-            status='COMPLETED',
-            amount=1000,
             card_id=card_id,
             account_id=account_id
         )

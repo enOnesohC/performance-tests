@@ -1,15 +1,19 @@
 from enum import StrEnum
 from pydantic import BaseModel, Field, ConfigDict
 
+from tools.fakers import fake
+
 
 class OperationType(StrEnum):
     TOP_UP = "TOP_UP"
-
+    TRANSFER = "TRANSFER"
+    WITHDRAWAL = "WITHDRAWAL"
 
 class OperationStatus(StrEnum):
     COMPLETED = "COMPLETED"
     FAILED = "FAILED"
-    ACTIVE = "ACTIVE"
+    IN_PROGRESS = "IN_PROGRESS"
+    UNSPECIFIED = "UNSPECIFIED"
 
 class OperationSchema(BaseModel):
     """
@@ -61,8 +65,8 @@ class MakeOperationRequestSchema(BaseModel):
     """
     model_config = ConfigDict(populate_by_name=True)
 
-    status: str
-    amount: int
+    status: OperationStatus = Field(default_factory=lambda: fake.enum(OperationStatus))
+    amount: float = Field(default_factory=fake.amount)
     card_id: str = Field(alias="cardId")
     account_id: str = Field(alias="accountId")
 
@@ -73,11 +77,11 @@ class MakePurchaseOperationRequestSchema(BaseModel):
     """
     model_config = ConfigDict(populate_by_name=True)
 
-    status: str
-    amount: int
+    status: OperationStatus = Field(default_factory=lambda: fake.enum(OperationStatus))
+    amount: float = Field(default_factory=fake.amount)
     card_id: str = Field(alias="cardId")
     account_id: str = Field(alias="accountId")
-    category: str
+    category: str = Field(default_factory=fake.category())
 
 
 class GetOperationsResponseSchema(BaseModel):
