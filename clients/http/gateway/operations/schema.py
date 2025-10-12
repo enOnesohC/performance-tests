@@ -81,7 +81,7 @@ class MakePurchaseOperationRequestSchema(BaseModel):
     amount: float = Field(default_factory=fake.amount)
     card_id: str = Field(alias="cardId")
     account_id: str = Field(alias="accountId")
-    category: str = Field(default_factory=fake.category())
+    category: str = Field(default_factory=fake.category)
 
 
 class GetOperationsResponseSchema(BaseModel):
