@@ -14,6 +14,8 @@ from contracts.services.gateway.users.users_gateway_service_pb2_grpc import User
 from contracts.services.gateway.accounts.accounts_gateway_service_pb2_grpc import AccountsGatewayServiceStub
 from contracts.services.gateway.operations.operations_gateway_service_pb2_grpc import OperationsGatewayServiceStub
 
+from contracts.services.operations.operation_pb2 import OperationStatus
+
 from tools.fakers import fake  # Используем генератор фейковых данных, созданный ранее
 
 # Устанавливаем соединение с gRPC-сервером по адресу localhost:9003
@@ -49,7 +51,7 @@ print('Get oped debit card account response:', get_open_debit_card_account)
 
 # Формируем запрос на пополнение счёта с рандомными данными
 make_top_up_operation_request = MakeTopUpOperationRequest(
-    status='OPERATION_STATUS_COMPLETED',
+    status=OperationStatus.OPERATION_STATUS_COMPLETED,
     amount=fake.amount(),
     card_id=get_open_debit_card_account.account.cards[0].id,
     account_id=get_open_debit_card_account.account.id
