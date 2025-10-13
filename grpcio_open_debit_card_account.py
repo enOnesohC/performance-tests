@@ -38,4 +38,4 @@ accounts_gateway_service = AccountsGatewayServiceStub(channel)
 
 # Отправляем запрос и получаем ответ
 get_open_debit_card_account: OpenDebitCardAccountResponse = accounts_gateway_service.OpenDebitCardAccount(create_open_debit_card_account)
-print('Get user response:', get_open_debit_card_account)
+print('Get oped debit card account response:', get_open_debit_card_account)
