@@ -307,7 +307,7 @@ class OperationsGatewayGRPCClient(GRPCClient):
         return self.make_cash_withdrawal_operation_api(request)
 
 
-def build_documents_gateway_grpc_client() -> OperationsGatewayGRPCClient:
+def build_operations_gateway_grpc_client() -> OperationsGatewayGRPCClient:
     """
     Фабрика для создания экземпляра OperationsGatewayGRPCClient.
 
