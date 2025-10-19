@@ -1,6 +1,6 @@
 from clients.grpc.gateway.users.client import build_users_gateway_grpc_client
 from clients.grpc.gateway.accounts.client import build_accounts_gateway_grpc_client
-from clients.grpc.gateway.documents.clients import build_documents_gateway_grpc_client
+from clients.grpc.gateway.documents.client import build_documents_gateway_grpc_client
 
 
 users_gateway_client = build_users_gateway_grpc_client()
