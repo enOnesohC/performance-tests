@@ -1,10 +1,11 @@
 from grpc import Channel
+from locust.env import Environment
 
 from contracts.services.operations.operation_pb2 import OperationStatus
 from tools.fakers import fake
 
 from clients.grpc.client import GRPCClient
-from clients.grpc.gateway.client import build_gateway_grpc_client
+from clients.grpc.gateway.client import build_gateway_grpc_client, build_gateway_locust_grpc_client
 from contracts.services.gateway.operations.operations_gateway_service_pb2_grpc import OperationsGatewayServiceStub
 from contracts.services.gateway.operations.rpc_get_operation_receipt_pb2 import (
     GetOperationReceiptResponse,
@@ -314,3 +315,15 @@ def build_operations_gateway_grpc_client() -> OperationsGatewayGRPCClient:
     :return: Инициализированный клиент для OperationsGatewayService.
     """
     return OperationsGatewayGRPCClient(channel=build_gateway_grpc_client())
+
+def build_operations_gateway_locust_grpc_client(environment: Environment) -> OperationsGatewayGRPCClient:
+    """
+    Функция создаёт экземпляр AccountsGatewayGRPCClient адаптированного под Locust.
+
+    Клиент автоматически собирает метрики и передаёт их в Locust через хуки.
+    Используется исключительно в нагрузочных тестах.
+
+    :param environment: объект окружения Locust.
+    :return: экземпляр AccountsGatewayGRPCClient с хуками сбора метрик.
+    """
+    return OperationsGatewayGRPCClient(channel=build_gateway_locust_grpc_client(environment))
