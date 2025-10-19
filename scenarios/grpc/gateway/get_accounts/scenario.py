@@ -6,6 +6,8 @@ from contracts.services.gateway.users.rpc_create_user_pb2 import CreateUserRespo
 from contracts.services.gateway.accounts.rpc_open_deposit_account_pb2 import OpenDepositAccountResponse
 from contracts.services.gateway.accounts.rpc_get_accounts_pb2 import GetAccountsResponse
 
+from tools.locust.user import LocustBaseUser
+
 
 class GetAccountsTaskSet(GatewayGRPCTaskSet):
     """
@@ -50,10 +52,8 @@ class GetAccountsTaskSet(GatewayGRPCTaskSet):
         )
 
 
-class GetAccountsScenarioUser(User):
+class GetAccountsScenarioUser(LocustBaseUser):
     """
     Пользователь Locust, исполняющий сценарий получения списка всех счетов.
     """
-    host = "localhost"
     tasks = [GetAccountsTaskSet]
-    wait_time = between(1, 3)
