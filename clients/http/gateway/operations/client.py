@@ -7,19 +7,19 @@ from clients.http.gateway.client import (
     build_gateway_locust_http_client
 )
 from clients.http.gateway.operations.schema import (
-    GetOperationQuerySchema,
+    GetOperationsQuerySchema,
     GetOperationsResponseSchema,
     GetOperationResponseSchema,
     GetOperationsSummaryResponseSchema,
     GetOperationReceiptResponseSchema,
-    MakeFeeResponseSchema,
-    MakeBillResponseSchema,
-    MakeCashResponseSchema,
+    MakeFeeOperationResponseSchema,
+    MakeBillPaymentOperationResponseSchema,
+    MakeCashWithdrawalOperationResponseSchema,
     MakeOperationRequestSchema,
-    MakePurchaseResponseSchema,
-    MakeTransferResponseSchema,
-    MakeTopUpResponseSchema,
-    MakeCashBackResponseSchema,
+    MakePurchaseOperationResponseSchema,
+    MakeTransferOperationResponseSchema,
+    MakeTopUpOperationResponseSchema,
+    MakeCashbackOperationResponseSchema,
     MakePurchaseOperationRequestSchema)
 
 class OperationsGatewayHTTPClient(HTTPClient):
@@ -47,17 +47,17 @@ class OperationsGatewayHTTPClient(HTTPClient):
         return self.get(f"/api/v1/operation-receipt/{operation_id}",
                         extensions=HTTPClientExtensions(route="/api/v1/operations/operation-receipt/{operation_id}"))
 
-    def get_operations_api(self, query: GetOperationQuerySchema) -> Response:
+    def get_operations_api(self, query: GetOperationsQuerySchema) -> Response:
         """
         Выполняет GET-запрос на получение списка операций для определённого счёта
 
         :param query: Словарь с параметрами запроса, например: {'userId': '123'}.
         :return: Объект httpx.Response с данными списка операций для определённого счёта
         """
-        return self.get("/api/v1/operations/operations", params=QueryParams(**query.model_dump(by_alias=True)),
+        return self.get("/api/v1/operations", params=QueryParams(**query.model_dump(by_alias=True)),
                         extensions=HTTPClientExtensions(route="/api/v1/operations"))
 
-    def get_operations_summary_api(self, query: GetOperationQuerySchema) -> Response:
+    def get_operations_summary_api(self, query: GetOperationsQuerySchema) -> Response:
         """
         Выполняет GET-запрос на получение статистики по операциям для определённого счёта
 
@@ -186,7 +186,7 @@ class OperationsGatewayHTTPClient(HTTPClient):
         response = self.get_operation_receipt_api(operation_id)
         return GetOperationReceiptResponseSchema.model_validate_json(response.text)
 
-    def get_operations(self, query: GetOperationQuerySchema) -> GetOperationsResponseSchema:
+    def get_operations(self, query: GetOperationsQuerySchema) -> GetOperationsResponseSchema:
         """
         Вызов метода get_operations
 
@@ -196,7 +196,7 @@ class OperationsGatewayHTTPClient(HTTPClient):
         response = self.get_operations_api(query)
         return GetOperationsResponseSchema.model_validate_json(response.text)
 
-    def get_operations_summary(self, query: GetOperationQuerySchema) -> GetOperationsSummaryResponseSchema:
+    def get_operations_summary(self, query: GetOperationsQuerySchema) -> GetOperationsSummaryResponseSchema:
         """
         Вызов метода get_operations_summary
 
@@ -206,7 +206,7 @@ class OperationsGatewayHTTPClient(HTTPClient):
         response = self.get_operations_summary_api(query)
         return GetOperationsSummaryResponseSchema.model_validate_json(response.text)
 
-    def make_fee_operation(self, card_id: str, account_id: str) -> MakeFeeResponseSchema:
+    def make_fee_operation(self, card_id: str, account_id: str) -> MakeFeeOperationResponseSchema:
         """
         Вызов метода make_fee_operation
 
@@ -219,9 +219,9 @@ class OperationsGatewayHTTPClient(HTTPClient):
             account_id=account_id
         )
         response = self.make_fee_operation_api(request)
-        return MakeFeeResponseSchema.model_validate_json(response.text)
+        return MakeFeeOperationResponseSchema.model_validate_json(response.text)
 
-    def make_top_up_operation(self, card_id: str, account_id: str) -> MakeTopUpResponseSchema:
+    def make_top_up_operation(self, card_id: str, account_id: str) -> MakeTopUpOperationResponseSchema:
         """
         Вызов метода make_top_up_operation
 
@@ -234,9 +234,9 @@ class OperationsGatewayHTTPClient(HTTPClient):
             account_id=account_id
         )
         response = self.make_top_up_operation_api(request)
-        return MakeTopUpResponseSchema.model_validate_json(response.text)
+        return MakeTopUpOperationResponseSchema.model_validate_json(response.text)
 
-    def make_cashback_operation(self, card_id: str, account_id: str) -> MakeCashBackResponseSchema:
+    def make_cashback_operation(self, card_id: str, account_id: str) -> MakeCashbackOperationResponseSchema:
         """
         Вызов метода make_cashback_operation
 
@@ -249,9 +249,9 @@ class OperationsGatewayHTTPClient(HTTPClient):
             account_id=account_id
         )
         response = self.make_cashback_operation_api(request)
-        return MakeCashBackResponseSchema.model_validate_json(response.text)
+        return MakeCashbackOperationResponseSchema.model_validate_json(response.text)
 
-    def make_transfer_operation(self, card_id: str, account_id: str) -> MakeTransferResponseSchema:
+    def make_transfer_operation(self, card_id: str, account_id: str) -> MakeTransferOperationResponseSchema:
         """
         Вызов метода make_transfer_operation
 
@@ -264,9 +264,9 @@ class OperationsGatewayHTTPClient(HTTPClient):
             account_id=account_id
         )
         response = self.make_transfer_operation_api(request)
-        return MakeTransferResponseSchema.model_validate_json(response.text)
+        return MakeTransferOperationResponseSchema.model_validate_json(response.text)
 
-    def make_purchase_operation(self, card_id: str, account_id: str) -> MakePurchaseResponseSchema:
+    def make_purchase_operation(self, card_id: str, account_id: str) -> MakePurchaseOperationResponseSchema:
         """
         Вызов метода make_purchase_operation
 
@@ -279,9 +279,9 @@ class OperationsGatewayHTTPClient(HTTPClient):
             account_id=account_id
         )
         response = self.make_purchase_operation_api(request)
-        return MakePurchaseResponseSchema.model_validate_json(response.text)
+        return MakePurchaseOperationResponseSchema.model_validate_json(response.text)
 
-    def make_bill_payment_operation(self, card_id: str, account_id: str) -> MakeBillResponseSchema:
+    def make_bill_payment_operation(self, card_id: str, account_id: str) -> MakeBillPaymentOperationResponseSchema:
         """
         Вызов метода make_bill_payment_operation
 
@@ -294,9 +294,9 @@ class OperationsGatewayHTTPClient(HTTPClient):
             account_id=account_id
         )
         response = self.make_bill_payment_operation_api(request)
-        return MakeBillResponseSchema.model_validate_json(response.text)
+        return MakeBillPaymentOperationResponseSchema.model_validate_json(response.text)
 
-    def make_cash_withdrawal_operation(self, card_id: str, account_id: str) -> MakeCashResponseSchema:
+    def make_cash_withdrawal_operation(self, card_id: str, account_id: str) -> MakeCashWithdrawalOperationResponseSchema:
         """
         Вызов метода make_cash_withdrawal_operation
 
@@ -309,7 +309,7 @@ class OperationsGatewayHTTPClient(HTTPClient):
             account_id=account_id
         )
         response = self.make_cash_withdrawal_operation_api(request)
-        return MakeCashResponseSchema.model_validate_json(response.text)
+        return MakeCashWithdrawalOperationResponseSchema.model_validate_json(response.text)
 
 def build_operations_gateway_http_client() -> OperationsGatewayHTTPClient:
     """

@@ -1,161 +1,212 @@
+from datetime import datetime
 from enum import StrEnum
-from pydantic import BaseModel, Field, ConfigDict
+
+from pydantic import BaseModel, Field, HttpUrl, ConfigDict
 
 from tools.fakers import fake
 
 
 class OperationType(StrEnum):
+    FEE = "FEE"
     TOP_UP = "TOP_UP"
+    PURCHASE = "PURCHASE"
+    CASHBACK = "CASHBACK"
     TRANSFER = "TRANSFER"
-    WITHDRAWAL = "WITHDRAWAL"
+    BILL_PAYMENT = "BILL_PAYMENT"
+    CASH_WITHDRAWAL = "CASH_WITHDRAWAL"
+
 
 class OperationStatus(StrEnum):
-    COMPLETED = "COMPLETED"
     FAILED = "FAILED"
+    COMPLETED = "COMPLETED"
     IN_PROGRESS = "IN_PROGRESS"
-    UNSPECIFIED = "UNSPECIFIED"
+
 
 class OperationSchema(BaseModel):
     """
-    Структура данных для операций
+    Описание структуры операции.
     """
-    model_config = ConfigDict(populate_by_name=True)
-
     id: str
     type: OperationType
     status: OperationStatus
-    amount: int
+    amount: float
     card_id: str = Field(alias="cardId")
     category: str
-    created_at: str = Field(alias="createdAt")
+    created_at: datetime = Field(alias="createdAt")
     account_id: str = Field(alias="accountId")
 
 
 class OperationReceiptSchema(BaseModel):
     """
-    Структура данных для рецепта
+    Описание структуры чека по операции.
     """
-    url: str
+    url: HttpUrl
     document: str
 
 
 class OperationsSummarySchema(BaseModel):
     """
-    Структура данных для получения списка операций пользователя
+    Описание структуры статистики по операциям.
     """
-    model_config = ConfigDict(populate_by_name=True)
-
-    spent_amount: int = Field(alias="spentAmount")
-    received_amount: int = Field(alias="receivedAmount")
-    cashback_amount: int = Field(alias="cashbackAmount")
-
-
-class GetOperationQuerySchema(BaseModel):
-    """
-    Структура данных для получения списка операций пользователя
-    """
-    model_config = ConfigDict(populate_by_name=True)
-
-    account_id: str = Field(alias="accountId")
-
-
-class MakeOperationRequestSchema(BaseModel):
-    """
-    Структура данных для отправления запроса на платёжные операции
-    """
-    model_config = ConfigDict(populate_by_name=True)
-
-    status: OperationStatus = Field(default_factory=lambda: fake.enum(OperationStatus))
-    amount: float = Field(default_factory=fake.amount)
-    card_id: str = Field(alias="cardId")
-    account_id: str = Field(alias="accountId")
-
-
-class MakePurchaseOperationRequestSchema(BaseModel):
-    """
-    Структура данных для отправления запроса на операцию покупки
-    """
-    model_config = ConfigDict(populate_by_name=True)
-
-    status: OperationStatus = Field(default_factory=lambda: fake.enum(OperationStatus))
-    amount: float = Field(default_factory=fake.amount)
-    card_id: str = Field(alias="cardId")
-    account_id: str = Field(alias="accountId")
-    category: str = Field(default_factory=fake.category)
-
-
-class GetOperationsResponseSchema(BaseModel):
-    """
-    Структура данных для ответа получения операций
-    """
-    operations: list[OperationSchema]
-
-
-class GetOperationsSummaryResponseSchema(BaseModel):
-    """
-    Структура данных для ответа сводки по операциям
-    """
-    operations: OperationsSummarySchema
-
-
-class GetOperationReceiptResponseSchema(BaseModel):
-    """
-    Структура данных для ответа по операции
-    """
-    receipt: OperationReceiptSchema
+    spent_amount: float = Field(alias="spentAmount")
+    received_amount: float = Field(alias="receivedAmount")
+    cashback_amount: float = Field(alias="cashbackAmount")
 
 
 class GetOperationResponseSchema(BaseModel):
     """
-    Структура данных для ответа по получению операции
+    Описание структуры ответа получения операции.
     """
     operation: OperationSchema
 
 
-class MakeFeeResponseSchema(BaseModel):
+class GetOperationsQuerySchema(BaseModel):
     """
-    Структура данных для ответа по операции налога
+    Структура query параметров запроса для получения списка операций по счёту.
     """
-    operation: MakeOperationRequestSchema
+    model_config = ConfigDict(populate_by_name=True)
+
+    account_id: str = Field(alias="accountId")
 
 
-class MakeTopUpResponseSchema(BaseModel):
+class GetOperationsResponseSchema(BaseModel):
     """
-    Структура данных для ответа по операции создания карты
+    Описание структуры ответа получения списка операций.
     """
-    operation: MakeOperationRequestSchema
+    operations: list[OperationSchema]
 
 
-class MakeCashBackResponseSchema(BaseModel):
+class GetOperationsSummaryQuerySchema(BaseModel):
     """
-    Структура данных для ответа по операции кэшбек
+    Структура query параметров запроса для получения статистики по операциям счёта.
     """
-    operation: MakeOperationRequestSchema
+    model_config = ConfigDict(populate_by_name=True)
+
+    account_id: str = Field(alias="accountId")
 
 
-class MakeTransferResponseSchema(BaseModel):
+class GetOperationsSummaryResponseSchema(BaseModel):
     """
-    Структура данных для ответа по операции перевода
+    Описание структуры ответа получения статистики по операциям.
     """
-    operation: MakeOperationRequestSchema
+    summary: OperationsSummarySchema
 
 
-class MakePurchaseResponseSchema(BaseModel):
+class GetOperationReceiptResponseSchema(BaseModel):
     """
-    Структура данных для ответа по операции покупки
+    Описание структуры ответа получения чека по операции.
     """
-    operation: MakePurchaseOperationRequestSchema
+    receipt: OperationReceiptSchema
 
 
-class MakeBillResponseSchema(BaseModel):
+class MakeOperationRequestSchema(BaseModel):
     """
-    Структура данных для ответа по операции счёта
+    Базовая структура тела запроса для создания финансовой операции.
     """
-    operation: MakeOperationRequestSchema
+    model_config = ConfigDict(populate_by_name=True)
+
+    status: OperationStatus = Field(default_factory=lambda: fake.enum(OperationStatus))
+    amount: float = Field(default_factory=fake.amount)
+    card_id: str = Field(alias="cardId")
+    account_id: str = Field(alias="accountId")
 
 
-class MakeCashResponseSchema(BaseModel):
+class MakeFeeOperationRequestSchema(MakeOperationRequestSchema):
     """
-    Структура данных для ответа по операции снятия
+    Структура запроса для создания операции комиссии.
     """
-    operation: MakeOperationRequestSchema
+    pass
+
+
+class MakeFeeOperationResponseSchema(BaseModel):
+    """
+    Описание структуры ответа на создание операции комиссии.
+    """
+    operation: OperationSchema
+
+
+class MakeTopUpOperationRequestSchema(MakeOperationRequestSchema):
+    """
+    Структура запроса для создания операции пополнения.
+    """
+    pass
+
+
+class MakeTopUpOperationResponseSchema(BaseModel):
+    """
+    Описание структуры ответа на создание операции пополнения.
+    """
+    operation: OperationSchema
+
+
+class MakeCashbackOperationRequestSchema(MakeOperationRequestSchema):
+    """
+    Структура запроса для создания операции кэшбэка.
+    """
+    pass
+
+
+class MakeCashbackOperationResponseSchema(BaseModel):
+    """
+    Описание структуры ответа на создание операции кэшбэка.
+    """
+    operation: OperationSchema
+
+
+class MakeTransferOperationRequestSchema(MakeOperationRequestSchema):
+    """
+    Структура запроса для создания операции перевода.
+    """
+    pass
+
+
+class MakeTransferOperationResponseSchema(BaseModel):
+    """
+    Описание структуры ответа на создание операции перевода.
+    """
+    operation: OperationSchema
+
+
+class MakePurchaseOperationRequestSchema(MakeOperationRequestSchema):
+    """
+    Структура запроса для создания операции покупки.
+
+    Дополнительное поле:
+    - category: категория покупки.
+    """
+    category: str = Field(default_factory=fake.category)
+
+
+class MakePurchaseOperationResponseSchema(BaseModel):
+    """
+    Описание структуры ответа на создание операции покупки.
+    """
+    operation: OperationSchema
+
+
+class MakeBillPaymentOperationRequestSchema(MakeOperationRequestSchema):
+    """
+    Структура запроса для создания операции оплаты по счёту.
+    """
+    pass
+
+
+class MakeBillPaymentOperationResponseSchema(BaseModel):
+    """
+    Описание структуры ответа на создание операции оплаты по счёту.
+    """
+    operation: OperationSchema
+
+
+class MakeCashWithdrawalOperationRequestSchema(MakeOperationRequestSchema):
+    """
+    Структура запроса для создания операции снятия наличных.
+    """
+    pass
+
+
+class MakeCashWithdrawalOperationResponseSchema(BaseModel):
+    """
+    Описание структуры ответа на создание операции снятия наличных.
+    """
+    operation: OperationSchema
