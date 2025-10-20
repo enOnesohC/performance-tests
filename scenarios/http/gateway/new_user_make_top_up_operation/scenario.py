@@ -2,7 +2,7 @@ from locust import task
 
 from clients.http.gateway.accounts.schema import OpenDebitCardAccountResponseSchema
 from clients.http.gateway.locust import GatewayHTTPSequentialTaskSet
-from clients.http.gateway.operations.schema import MakeTopUpOperationResponseSchema, GetOperationsQuerySchema
+from clients.http.gateway.operations.schema import MakeTopUpOperationResponseSchema
 from clients.http.gateway.users.schema import CreateUserResponseSchema
 from tools.locust.user import LocustBaseUser
 
@@ -48,10 +48,8 @@ class MakeTopUpOperationSequentialTaskSet(GatewayHTTPSequentialTaskSet):
         if not self.open_debit_card_account_response:
             return
 
-        request = GetOperationsQuerySchema(account_id=self.open_debit_card_account_response.account.id)
-
         self.operations_gateway_client.get_operations(
-            query=request
+            account_id=self.open_debit_card_account_response.account.id
         )
 
     @task
@@ -60,10 +58,8 @@ class MakeTopUpOperationSequentialTaskSet(GatewayHTTPSequentialTaskSet):
         if not self.open_debit_card_account_response:
             return
 
-        request = GetOperationsQuerySchema(account_id=self.open_debit_card_account_response.account.id)
-
         self.operations_gateway_client.get_operations_summary(
-            query=request
+            account_id=self.open_debit_card_account_response.account.id
         )
 
     @task

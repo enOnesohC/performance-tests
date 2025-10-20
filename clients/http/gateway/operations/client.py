@@ -47,23 +47,25 @@ class OperationsGatewayHTTPClient(HTTPClient):
         return self.get(f"/api/v1/operation-receipt/{operation_id}",
                         extensions=HTTPClientExtensions(route="/api/v1/operations/operation-receipt/{operation_id}"))
 
-    def get_operations_api(self, query: GetOperationsQuerySchema) -> Response:
+    def get_operations_api(self,  account_id: str) -> Response:
         """
         Выполняет GET-запрос на получение списка операций для определённого счёта
 
-        :param query: Словарь с параметрами запроса, например: {'userId': '123'}.
+        :param account_id: ID счёта
         :return: Объект httpx.Response с данными списка операций для определённого счёта
         """
+        query = GetOperationsQuerySchema(account_id=account_id)
         return self.get("/api/v1/operations", params=QueryParams(**query.model_dump(by_alias=True)),
                         extensions=HTTPClientExtensions(route="/api/v1/operations"))
 
-    def get_operations_summary_api(self, query: GetOperationsQuerySchema) -> Response:
+    def get_operations_summary_api(self, account_id: str) -> Response:
         """
         Выполняет GET-запрос на получение статистики по операциям для определённого счёта
 
-        :param query: Словарь с параметрами запроса, например: {'userId': '123'}.
+        :param account_id: ID счёта
         :return: Объект httpx.Response с данными об операции.
         """
+        query = GetOperationsQuerySchema(account_id=account_id)
         return self.get("/api/v1/operations/operations-summary", params=QueryParams(**query.model_dump(by_alias=True)),
                         extensions=HTTPClientExtensions(route="/api/v1/operations/operations-summary"))
 
@@ -186,24 +188,24 @@ class OperationsGatewayHTTPClient(HTTPClient):
         response = self.get_operation_receipt_api(operation_id)
         return GetOperationReceiptResponseSchema.model_validate_json(response.text)
 
-    def get_operations(self, query: GetOperationsQuerySchema) -> GetOperationsResponseSchema:
+    def get_operations(self, account_id: str) -> GetOperationsResponseSchema:
         """
         Вызов метода get_operations
 
-        :param query: Словарь типа GetOperationQueryDict
+        :param account_id: ID счета
         :return: Ответ от сервера (объект JSON).
         """
-        response = self.get_operations_api(query)
+        response = self.get_operations_api(account_id)
         return GetOperationsResponseSchema.model_validate_json(response.text)
 
-    def get_operations_summary(self, query: GetOperationsQuerySchema) -> GetOperationsSummaryResponseSchema:
+    def get_operations_summary(self, account_id: str) -> GetOperationsSummaryResponseSchema:
         """
         Вызов метода get_operations_summary
 
-        :param query: Словарь типа GetOperationQueryDict
+        :param account_id: ID счета
         :return: Ответ от сервера (объект JSON).
         """
-        response = self.get_operations_summary_api(query)
+        response = self.get_operations_summary_api(account_id)
         return GetOperationsSummaryResponseSchema.model_validate_json(response.text)
 
     def make_fee_operation(self, card_id: str, account_id: str) -> MakeFeeOperationResponseSchema:
