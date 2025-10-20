@@ -36,3 +36,4 @@ if __name__ == "__main__":
     # Если файл запускается напрямую, создаём объект сценария и запускаем его.
     seeds_scenario = ExistingUserIssueVirtualCardSeedsScenario()
     seeds_scenario.build()
+
