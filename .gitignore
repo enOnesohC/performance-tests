@@ -1,3 +1,19 @@
+#pycharm
+.idea
+
+#python
 __pycache__/
 *.py[cod]
 *$py.class
+.venv
+
+# locust
+dumps
+locust_*.csv
+locust_*.json
+report.html
+
+# Mac OS
+.DS_Store
+
+
