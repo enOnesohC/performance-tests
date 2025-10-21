@@ -1,7 +1,10 @@
 import os
 
 from seeds.schema.result import SeedsResult
+from tools.logger import get_logger
 
+logger = get_logger("SEEDS_DUMPS")
+path = f"./dumps/"
 
 def save_seeds_result(result: SeedsResult, scenario: str):
     """
@@ -18,6 +21,8 @@ def save_seeds_result(result: SeedsResult, scenario: str):
     # Сохраняем результат сидинга в файл с именем {scenario}_seeds.json
     with open(f"./dumps/{scenario}_seeds.json", 'w+', encoding="utf-8") as file:
         file.write(result.model_dump_json())
+        logger.debug(f"Seeding result saved to file: {path}{scenario}_seeds.json")
+
 
 
 def load_seeds_result(scenario: str) -> SeedsResult:
@@ -29,4 +34,5 @@ def load_seeds_result(scenario: str) -> SeedsResult:
     """
     # Открываем файл и валидируем его как объект SeedsResult
     with open(f'./dumps/{scenario}_seeds.json', 'r', encoding="utf-8") as file:
+        logger.debug(f"Seeding result loaded from file: {path}{scenario}_seeds.json")
         return SeedsResult.model_validate_json(file.read())
