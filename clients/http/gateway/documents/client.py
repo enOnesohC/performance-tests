@@ -36,7 +36,7 @@ class DocumentsGatewayHTTPClient(HTTPClient):
         :return: Ответ от сервера (объект httpx.Response).
         """
         return self.get(f"{APIRoutes.DOCUMENTS}/contract-document/{account_id}",
-                        extensions=HTTPClientExtensions(route=f"{APIRoutes.DOCUMENTS}/tariff-document/{{account_id}}"))
+                        extensions=HTTPClientExtensions(route=f"{APIRoutes.DOCUMENTS}/contract-document/{{account_id}}"))
 
     def get_tariff_document(self, account_id: str) -> GetTariffDocumentResponseSchema:
         """
