@@ -119,7 +119,7 @@ async def update_course(course_id: int, course: CourseIn):
     return store.update(course_id, course)
 
 
-@courses_router.delete("/{courses_router}", status_code=status.HTTP_204_NO_CONTENT)
+@courses_router.delete("/{course_id}", status_code=status.HTTP_204_NO_CONTENT)
 async def delete_course(course_id: int):
     """
     DELETE /api/v1/courses/{course_id}
