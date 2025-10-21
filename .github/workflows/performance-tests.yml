@@ -82,11 +82,14 @@ jobs:
   publish-report:
     runs-on: ubuntu-latest  # Используется стандартный GitHub Actions runner
     timeout-minutes: 30  # Ограничение по времени выполнения — 30 минут
+    needs: run-tests # чтобы выполнялась после задачи run-tests
+    if: always() # чтобы выполнялась даже в случае падения run-tests
 
     steps:
       # 1. Деплой HTML-отчёта в GitHub Pages, чтобы можно было посмотреть результаты в браузере
       - name: Deploy HTML report to GitHub Pages
-        if: always()
+        needs: run-tests # чтобы выполнялась после задачи run-tests
+
         uses: peaceiris/actions-gh-pages@v4
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}  # Авторизация для push в gh-pages
