@@ -88,7 +88,6 @@ jobs:
     steps:
       # 1. Деплой HTML-отчёта в GitHub Pages, чтобы можно было посмотреть результаты в браузере
       - name: Deploy HTML report to GitHub Pages
-        needs: run-tests # чтобы выполнялась после задачи run-tests
 
         uses: peaceiris/actions-gh-pages@v4
         with:
